@@ -8,7 +8,7 @@
   "module": "./lib/index.esm.js",
   "browser": "./lib/index.umd.js",
   "scripts": {
-    "test": "mocha --recursive",
+    "test": "rollup -c && mocha --recursive",
     "build": "rimraf lib && rollup -c",
     "cover": "istanbul cover _mocha -- --require babel-core/register --require babel-polyfill --recursive",
     "lint": "eslint src test"
