@@ -1,6 +1,9 @@
 import baseX from 'base-x';
 import bech32 from 'bech32';
 import hashSha256 from 'hash.js/lib/hash/sha/256';
+import buffer from 'buffer/';
+
+const Buffer = buffer.Buffer;
 
 const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
 
