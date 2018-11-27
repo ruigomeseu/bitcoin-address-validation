@@ -1,10 +1,10 @@
 import baseX from 'base-x';
 import bech32 from 'bech32';
-import crypto from 'crypto';
+import hashSha256 from 'hash.js/lib/hash/sha/256';
 
 const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
 
-const sha256 = payload => crypto.createHash('sha256').update(payload).digest();
+const sha256 = payload => Buffer.from(hashSha256().update(payload).digest());
 
 const addressTypes = {
   0x00: {
