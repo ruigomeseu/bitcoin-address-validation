@@ -10,7 +10,7 @@
   "scripts": {
     "test": "rollup -c && mocha --recursive",
     "build": "rimraf lib && rollup -c",
-    "cover": "istanbul cover _mocha -- --require babel-core/register --require babel-polyfill --recursive",
+    "cover": "nyc mocha",
     "lint": "eslint src test"
   },
   "keywords": [
@@ -43,9 +43,11 @@
     "eslint-plugin-react": "^7.11.1",
     "istanbul": "^1.0.0-alpha",
     "mocha": "^5.0.0",
+    "nyc": "^13.1.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.67.1",
     "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {

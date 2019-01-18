@@ -1,5 +1,6 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import builtins from 'rollup-plugin-node-builtins';
 import pkg from './package.json';
 
 export default [
@@ -12,13 +13,19 @@ export default [
     },
     plugins: [
       resolve(),
-      commonjs()
+      commonjs(),
+      builtins()
     ]
   },
 
   {
     input: 'src/index.js',
-    external: ['ms'],
+    external: [
+      'base-x',
+      'bech32',
+      'bops',
+      'hash.js/lib/hash/sha/256'
+    ],
     output: [
       { file: pkg.main, format: 'cjs' },
       { file: pkg.module, format: 'es' }
