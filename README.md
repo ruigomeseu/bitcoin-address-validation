@@ -50,7 +50,8 @@ validate('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
 {
   address: '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem',
   type: 'p2pkh',
-  testnet: false
+  testnet: false,
+  bech32: false
 }
 ```
 
