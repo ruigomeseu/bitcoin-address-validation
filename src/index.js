@@ -92,7 +92,7 @@ const validateBtcAddress = (address) => {
     return false;
   }
 
-  return addressTypes[version] ? Object.assign({ address }, addressTypes[version]) : false;
+  return addressTypes[version] ? Object.assign({ address, bech32: false }, addressTypes[version]) : false;
 };
 
 export default validateBtcAddress;

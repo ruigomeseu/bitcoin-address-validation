@@ -6,14 +6,14 @@ describe('Validator', () => {
     const address = '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem';
 
     assert.isNotFalse(validate(address));
-    assert.include(validate(address), { type: 'p2pkh', testnet: false });
+    assert.include(validate(address), { type: 'p2pkh', testnet: false, bech32: false });
   });
 
   it('validates Testnet P2PKH', () => {
     const address = 'mipcBbFg9gMiCh81Kj8tqqdgoZub1ZJRfn';
 
     assert.isNotFalse(validate(address));
-    assert.include(validate(address), { type: 'p2pkh', testnet: true });
+    assert.include(validate(address), { type: 'p2pkh', testnet: true, bech32: false });
   });
 
   it('fails on invalid P2PKH', () => {
@@ -26,14 +26,14 @@ describe('Validator', () => {
     const address = '3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy';
 
     assert.isNotFalse(validate(address));
-    assert.include(validate(address), { type: 'p2sh', testnet: false });
+    assert.include(validate(address), { type: 'p2sh', testnet: false, bech32: false });
   });
 
   it('validates Testnet P2SH', () => {
     const address = '2MzQwSSnBHWHqSAqtTVQ6v47XtaisrJa1Vc';
 
     assert.isNotFalse(validate(address));
-    assert.include(validate(address), { type: 'p2sh', testnet: true });
+    assert.include(validate(address), { type: 'p2sh', testnet: true, bech32: false });
   });
 
   it('fails on invalid P2SH', () => {
