@@ -68,11 +68,16 @@ const validateBech32 = (address) => {
 
 const validateBtcAddress = (address) => {
   let decoded;
+  let prefix = address.substr(0, 2)
+
+  if (prefix === 'bc' || prefix == 'tb') {
+    return validateBech32(address);
+  }
 
   try {
     decoded = base58.decode(address);
   } catch (error) {
-    return validateBech32(address);
+    return false;
   }
 
   const { length } = decoded;
