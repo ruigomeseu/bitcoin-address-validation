@@ -43,10 +43,16 @@ describe('Validator', () => {
   });
 
   it('validates Mainnet Bech32 P2WPKH', () => {
-    const address = 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4';
+    let addresses = [
+      'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
+      'bc1q973xrrgje6etkkn9q9azzsgpxeddats8ckvp5s',
+    ];
 
-    assert.isNotFalse(validate(address));
-    assert.include(validate(address), { bech32: true, type: 'p2wpkh', testnet: false });
+    assert.isNotFalse(validate(addresses[0]));
+    assert.include(validate(addresses[0]), { bech32: true, type: 'p2wpkh', testnet: false });
+
+    assert.isNotFalse(validate(addresses[1]));
+    assert.include(validate(addresses[1]), { bech32: true, type: 'p2wpkh', testnet: false });
   });
 
   it('validates Testnet Bech32 P2WPKH', () => {
