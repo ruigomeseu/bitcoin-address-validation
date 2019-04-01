@@ -1,6 +1,6 @@
 {
   "name": "bitcoin-address-validation",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Validate any Bitcoin address - Bech32, P2SH and P2PKH",
   "homepage": "https://github.com/ruigomeseu/bitcoin-address-validation",
   "bugs": "https://github.com/ruigomeseu/bitcoin-address-validation/issues",

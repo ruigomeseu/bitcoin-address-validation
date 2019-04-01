@@ -42,6 +42,18 @@ describe('Validator', () => {
     assert.isFalse(validate(address));
   });
 
+  it('handles null address', () => {
+    const address = null;
+
+    assert.isFalse(validate(address));
+  });
+
+  it('handles bogus address', () => {
+    const address = 'x';
+
+    assert.isFalse(validate(address));
+  });
+
   it('validates Mainnet Bech32 P2WPKH', () => {
     let addresses = [
       'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',

@@ -67,6 +67,10 @@ const validateBech32 = (address) => {
 };
 
 const validateBtcAddress = (address) => {
+  if (!address) {
+    return false;
+  }
+
   let decoded;
   let prefix = address.substr(0, 2)
 
