@@ -8,7 +8,7 @@ export default [
     input: 'src/index.js',
     output: {
       name: 'index',
-      file: pkg.browser,
+      file: pkg.unpkg,
       format: 'umd'
     },
     plugins: [
