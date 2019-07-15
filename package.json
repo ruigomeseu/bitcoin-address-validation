@@ -1,12 +1,12 @@
 {
   "name": "bitcoin-address-validation",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Validate any Bitcoin address - Bech32, P2SH and P2PKH",
   "homepage": "https://github.com/ruigomeseu/bitcoin-address-validation",
   "bugs": "https://github.com/ruigomeseu/bitcoin-address-validation/issues",
   "main": "./lib/index.cjs.js",
   "module": "./lib/index.esm.js",
-  "browser": "./lib/index.umd.js",
+  "unpkg": "./lib/index.umd.js",
   "scripts": {
     "test": "rollup -c && mocha --recursive",
     "build": "rimraf lib && rollup -c",
