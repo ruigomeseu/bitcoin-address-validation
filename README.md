@@ -3,10 +3,10 @@
 # bitcoin-address-validation
 
 [![Build Status](https://img.shields.io/travis/ruigomeseu/bitcoin-address-validation.svg)](https://travis-ci.org/ruigomeseu/bitcoin-address-validation)
-[![npm version](https://badge.fury.io/js/bitcoin-address-validation.svg)](https://badge.fury.io/js/bitcoin-address-validation)
-![David](https://img.shields.io/david/ruigomeseu/bitcoin-address-validation.svg)
-![npm](https://img.shields.io/npm/dt/bitcoin-address-validation.svg)
-![Twitter Follow](https://img.shields.io/twitter/follow/ruigomeseu.svg?style=social)
+[![npm version](https://badge.fury.io/js/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
+[![David](https://img.shields.io/david/ruigomeseu/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
+[![npm](https://img.shields.io/npm/dt/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
+[![Twitter Follow](https://img.shields.io/twitter/follow/ruigomeseu.svg?style=social)](https://twitter.com/ruigomeseu)
 
 Validate Bitcoin addresses - Bech32, P2PKH and P2SH! Available for ES6 and Node.js.
 
