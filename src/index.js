@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 
 const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
 
-const sha256 = payload => Buffer(hashSha256().update(payload).digest());
+const sha256 = payload => Buffer.from(hashSha256().update(payload).digest());
 
 const addressTypes = {
   0x00: {
