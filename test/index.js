@@ -74,6 +74,13 @@ describe('Validator', () => {
     assert.include(validate(address), { bech32: true, type: 'p2wpkh', testnet: true });
   });
 
+  it('validates Regtest Bech32 P2WPKH', () => {
+    const address = 'bcrt1q6z64a43mjgkcq0ul2znwneq3spghrlau9slefp';
+
+    assert.isNotFalse(validate(address));
+    assert.include(validate(address), { bech32: true, type: 'p2wpkh', testnet: true });
+  });
+
   it('validates Mainnet Bech32 P2WSH', () => {
     const address = 'bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3';
 
@@ -83,6 +90,13 @@ describe('Validator', () => {
 
   it('validates Testnet Bech32 P2WSH', () => {
     const address = 'tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7';
+
+    assert.isNotFalse(validate(address));
+    assert.include(validate(address), { bech32: true, type: 'p2wsh', testnet: true });
+  });
+
+  it('validates Regtest Bech32 P2WSH', () => {
+    const address = 'bcrt1q5n2k3frgpxces3dsw4qfpqk4kksv0cz96pldxdwxrrw0d5ud5hcqzzx7zt';
 
     assert.isNotFalse(validate(address));
     assert.include(validate(address), { bech32: true, type: 'p2wsh', testnet: true });
