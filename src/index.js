@@ -38,7 +38,7 @@ const validateBech32 = (address) => {
     return false;
   }
 
-  if (!['bc', 'tb'].includes(decoded.prefix)) {
+  if (!['bc', 'tb', 'bcrt'].includes(decoded.prefix)) {
     return false;
   }
 
