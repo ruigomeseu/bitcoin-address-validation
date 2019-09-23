@@ -1,31 +1,31 @@
 import baseX from 'base-x';
 import bech32 from 'bech32';
-import hashSha256 from 'hash.js/lib/hash/sha/256';
+import sha from 'sha.js';
 import { Buffer } from 'buffer';
 
 const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
 
-const sha256 = payload => Buffer.from(hashSha256().update(payload).digest());
+const sha256 = payload => Buffer.from(sha('sha256').update(payload).digest());
 
 const addressTypes = {
   0x00: {
     type: 'p2pkh',
-    testnet: false
+    network: 'mainnet'
   },
 
   0x6f: {
     type: 'p2pkh',
-    testnet: true
+    network: 'testnet'
   },
 
   0x05: {
     type: 'p2sh',
-    testnet: false
+    network: 'mainnet'
   },
 
   0xc4: {
     type: 'p2sh',
-    testnet: true
+    network: 'testnet'
   }
 };
 
@@ -60,7 +60,7 @@ const validateBech32 = (address) => {
 
   return {
     bech32: true,
-    testnet: decoded.prefix !== 'bc',
+    network: decoded.prefix !== 'bc' ? 'testnet' : 'mainnet',
     address,
     type
   };
@@ -72,9 +72,9 @@ const validateBtcAddress = (address) => {
   }
 
   let decoded;
-  let prefix = address.substr(0, 2)
+  const prefix = address.substr(0, 2);
 
-  if (prefix === 'bc' || prefix == 'tb') {
+  if (prefix === 'bc' || prefix === 'tb') {
     return validateBech32(address);
   }
 
@@ -101,7 +101,19 @@ const validateBtcAddress = (address) => {
     return false;
   }
 
-  return addressTypes[version] ? Object.assign({ address, bech32: false }, addressTypes[version]) : false;
+  return addressTypes[version]
+    ? Object.assign({ address, bech32: false }, addressTypes[version])
+    : false;
 };
 
-export default validateBtcAddress;
+const strictValidation = (address, network) => {
+  const validated = validateBtcAddress(address);
+  if (!validated) return false;
+  if (network) {
+    if (validated.network !== network) return false;
+    return true;
+  }
+  return validated;
+};
+
+export default strictValidation;

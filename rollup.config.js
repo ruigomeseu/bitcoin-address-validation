@@ -27,7 +27,7 @@ export default [
       'base-x',
       'buffer',
       'bech32',
-      'hash.js/lib/hash/sha/256'
+      'sha.js'
     ],
     output: [
       { file: pkg.main, format: 'cjs' },
