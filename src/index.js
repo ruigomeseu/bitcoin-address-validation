@@ -38,7 +38,15 @@ const validateBech32 = (address) => {
     return false;
   }
 
-  if (!['bc', 'tb', 'bcrt'].includes(decoded.prefix)) {
+  const prefixesNetwork = {
+    bc: 'mainnet',
+    tb: 'testnet',
+    bcrt: 'regtest'
+  }
+
+  const network = prefixesNetwork[decoded.prefix];
+
+  if (network === undefined) {
     return false;
   }
 
@@ -60,7 +68,7 @@ const validateBech32 = (address) => {
 
   return {
     bech32: true,
-    network: decoded.prefix !== 'bc' ? 'testnet' : 'mainnet',
+    network,
     address,
     type
   };
