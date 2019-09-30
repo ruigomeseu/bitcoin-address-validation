@@ -15,7 +15,7 @@ validate('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4');
 
 {
   bech32: true,
-  testnet: false,
+  network: 'mainnet',
   address: 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
   type: 'p2wpkh'
 }
@@ -55,7 +55,7 @@ validate('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
 {
   address: '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem',
   type: 'p2pkh',
-  testnet: false,
+  network: 'mainnet',
   bech32: false
 }
 ```
@@ -67,7 +67,7 @@ validate('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4');
 
 {
   bech32: true,
-  testnet: false,
+  network: 'mainnet',
   address: 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
   type: 'p2wpkh'
 }
@@ -82,6 +82,12 @@ validate('bc1qw508d6qejxtdg4y5r3zrrvary0c5xw7kv8f3t4')
 
 false
 ```
+
+### Networks
+
+This library supporters 3 different types of networks: `mainnet`, `testnet` and `regtest`.
+
+> **Note:** When dealing with traditional (non-bech32) addresses, all `regtest` addresses will be recognized as `tesnet` addresses.
 
 ## Author
 
