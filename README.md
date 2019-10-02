@@ -85,7 +85,7 @@ false
 
 ### Networks
 
-This library supporters 3 different types of networks: `mainnet`, `testnet` and `regtest`.
+This library supports 3 different types of networks: `mainnet`, `testnet` and `regtest`.
 
 > **Note:** When dealing with traditional (non-bech32) addresses, all `regtest` addresses will be recognized as `tesnet` addresses.
 
