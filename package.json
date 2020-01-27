@@ -54,5 +54,6 @@
     "base-x": "^3.0.6",
     "bech32": "^1.1.3",
     "sha.js": "^2.4.11"
-  }
+  },
+  "typings": "./typings.d.ts"
 }
