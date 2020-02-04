@@ -15,8 +15,6 @@ declare module "bitcoin-address-validation" {
     address: string;
     type: AddressType;
   }
-  function strictValidation(address: string): false | Validation;
-  function strictValidation(address: string, network: Network): boolean;
-
-  export default strictValidation;
+  export function validator(address: string, regtestAllowed?: boolean): false | Validation;
+  export function strictValidator(address: string, network: Network, regtestAllowed?: boolean): boolean;
 }

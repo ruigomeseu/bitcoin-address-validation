@@ -42,7 +42,7 @@ const validateBech32 = (address) => {
     bc: 'mainnet',
     tb: 'testnet',
     bcrt: 'regtest'
-  }
+  };
 
   const network = prefixesNetwork[decoded.prefix];
 
@@ -114,14 +114,16 @@ const validateBtcAddress = (address) => {
     : false;
 };
 
-const strictValidation = (address, network) => {
+export const validator = (address, regtestAllowed = false) => {
   const validated = validateBtcAddress(address);
   if (!validated) return false;
-  if (network) {
-    if (validated.network !== network) return false;
-    return true;
+  if (!regtestAllowed && validated.network === 'regtest') {
+    validated.network = 'testnet';
   }
   return validated;
 };
 
-export default strictValidation;
+export const strictValidator = (address, network, regtestAllowed = false) => {
+  const validated = validator(address, regtestAllowed);
+  return validated && validated.network === network;
+};
