@@ -1,6 +1,5 @@
 language: node_js
 node_js:
-  - 6     # to be removed 2019-04-01
   - 8     # to be removed 2019-12-31
   - 10    # to be removed 2021-04-01
   - 11    # to be removed 2019-06-01
