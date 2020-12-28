@@ -3,33 +3,13 @@ import bech32 from 'bech32';
 import sha from 'sha.js';
 import { Buffer } from 'buffer';
 
+import networks from './networks';
+
 const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
 
 const sha256 = payload => Buffer.from(sha('sha256').update(payload).digest());
 
-const addressTypes = {
-  0x00: {
-    type: 'p2pkh',
-    network: 'mainnet'
-  },
-
-  0x6f: {
-    type: 'p2pkh',
-    network: 'testnet'
-  },
-
-  0x05: {
-    type: 'p2sh',
-    network: 'mainnet'
-  },
-
-  0xc4: {
-    type: 'p2sh',
-    network: 'testnet'
-  }
-};
-
-const validateBech32 = (address) => {
+const validateBech32 = (address, networkCurrency) => {
   let decoded;
 
   try {
@@ -38,13 +18,7 @@ const validateBech32 = (address) => {
     return false;
   }
 
-  const prefixesNetwork = {
-    bc: 'mainnet',
-    tb: 'testnet',
-    bcrt: 'regtest'
-  }
-
-  const network = prefixesNetwork[decoded.prefix];
+  const network = networkCurrency.prefixesNetwork[decoded.prefix];
 
   if (network === undefined) {
     return false;
@@ -74,16 +48,22 @@ const validateBech32 = (address) => {
   };
 };
 
-const validateBtcAddress = (address) => {
+export const validate = (address, currency = 'bitcoin') => {
   if (!address) {
     return false;
   }
 
-  let decoded;
-  const prefix = address.substr(0, 2);
+  const networkCurrency = currency.constructor === String
+    ? networks[currency]
+    : currency;
+  const networkPrefixes = Object.keys(networkCurrency.prefixesNetwork);
 
-  if (prefix === 'bc' || prefix === 'tb') {
-    return validateBech32(address);
+  let decoded;
+
+  const prefix = networkPrefixes.find(pref => address.indexOf(pref) === 0);
+
+  if (prefix) {
+    return validateBech32(address, networkCurrency);
   }
 
   try {
@@ -109,13 +89,13 @@ const validateBtcAddress = (address) => {
     return false;
   }
 
-  return addressTypes[version]
-    ? Object.assign({ address, bech32: false }, addressTypes[version])
+  return networkCurrency.addressTypes[version]
+    ? Object.assign({ address, bech32: false }, networkCurrency.addressTypes[version])
     : false;
 };
 
 const strictValidation = (address, network) => {
-  const validated = validateBtcAddress(address);
+  const validated = validate(address);
   if (!validated) return false;
   if (network) {
     if (validated.network !== network) return false;
