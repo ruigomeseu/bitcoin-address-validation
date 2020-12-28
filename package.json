@@ -13,7 +13,7 @@
     "build": "rimraf lib && rollup -c",
     "cover": "nyc mocha",
     "lint": "eslint src test",
-    "install": "( [ ! -f ./ThisIsNpmPackage ] && [ ! -f ./AlreadyInstalled ] && echo \"\" > ./AlreadyInstalled && npm install . && npm build ) || echo \"SKIP: NON GIT SOURCE\""
+    "install": "( [ ! -f ./ThisIsNpmPackage ] && [ ! -f ./AlreadyInstalled ] && echo \"\" > ./AlreadyInstalled && npm install . && npm run build ) || echo \"SKIP: NON GIT SOURCE\""
   },
   "keywords": [
     "address",
