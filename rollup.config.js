@@ -1,5 +1,6 @@
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import copy from 'rollup-plugin-copy';
 import builtins from 'rollup-plugin-node-builtins';
 import pkg from './package.json';
 
@@ -17,7 +18,12 @@ export default [
         preferBuiltins: true
       }),
       commonjs(),
-      builtins()
+      builtins(),
+      copy({
+        targets: [
+          { src: './types.d.ts', dest: './lib' }
+        ]
+      })
     ]
   },
 
