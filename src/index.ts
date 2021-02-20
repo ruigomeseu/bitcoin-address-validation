@@ -5,66 +5,80 @@ import { Buffer } from 'buffer';
 
 const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
 
-const sha256 = (payload) => Buffer.from(sha('sha256').update(payload).digest());
+const sha256 = (payload: string | Buffer) => Buffer.from(sha('sha256').update(payload).digest());
 
-const addressTypes = {
+enum Network {
+  mainnet = "mainnet",
+  testnet = "testnet",
+  regtest = "regtest",
+}
+
+enum AddressType {
+  p2pkh = "p2pkh",
+  p2sh = "p2sh",
+  p2wpkh = "p2wpkh",
+  p2wsh = "p2wsh",
+}
+
+type AddressInfo = {
+  bech32: boolean;
+  network: Network;
+  address: string;
+  type: AddressType;
+}
+
+const addressTypes: { [key: number]: { type: AddressType, network: Network } } = {
   0x00: {
-    type: 'p2pkh',
-    network: 'mainnet',
+    type: AddressType.p2pkh,
+    network: Network.mainnet,
   },
 
   0x6f: {
-    type: 'p2pkh',
-    network: 'testnet',
+    type: AddressType.p2pkh,
+    network: Network.testnet,
   },
 
   0x05: {
-    type: 'p2sh',
-    network: 'mainnet',
+    type: AddressType.p2sh,
+    network: Network.mainnet,
   },
 
   0xc4: {
-    type: 'p2sh',
-    network: 'testnet',
+    type: AddressType.p2sh,
+    network: Network.testnet,
   },
 };
 
-const validateBech32 = (address) => {
+const parseBech32 = (address: string): AddressInfo => {
   let decoded;
 
   try {
     decoded = bech32.decode(address);
   } catch (error) {
-    return false;
+    throw new Error('Invalid address');
   }
 
-  const prefixesNetwork = {
-    bc: 'mainnet',
-    tb: 'testnet',
-    bcrt: 'regtest',
+  const mapPrefixToNetwork: { [key: string]: Network } = {
+    'bc': Network.mainnet,
+    'tb': Network.testnet,
+    'bcrt': Network.regtest,
   };
 
-  const network = prefixesNetwork[decoded.prefix];
+  const network: Network = mapPrefixToNetwork[decoded.prefix];
 
   if (network === undefined) {
-    return false;
+    throw new Error('Invalid address');
   }
 
   const witnessVersion = decoded.words[0];
 
   if (witnessVersion < 0 || witnessVersion > 16) {
-    return false;
+    throw new Error('Invalid address');
   }
 
   const data = bech32.fromWords(decoded.words.slice(1));
 
-  let type;
-
-  if (data.length === 20) {
-    type = 'p2wpkh';
-  } else if (data.length === 32) {
-    type = 'p2wsh';
-  }
+  const type = data.length === 20 ? AddressType.p2wpkh : AddressType.p2wsh;
 
   return {
     bech32: true,
@@ -74,28 +88,24 @@ const validateBech32 = (address) => {
   };
 };
 
-const validate = (address) => {
-  if (!address) {
-    return false;
-  }
-
+const getAddressInfo = (address: string): AddressInfo => {
   let decoded;
   const prefix = address.substr(0, 2);
 
   if (prefix === 'bc' || prefix === 'tb') {
-    return validateBech32(address);
+    return parseBech32(address);
   }
 
   try {
     decoded = base58.decode(address);
   } catch (error) {
-    return false;
+    throw new Error('Invalid address');
   }
 
   const { length } = decoded;
 
   if (length !== 25) {
-    return false;
+    throw new Error('Invalid address');
   }
 
   const version = decoded.readUInt8(0);
@@ -106,21 +116,37 @@ const validate = (address) => {
   const expectedChecksum = sha256(sha256(body)).slice(0, 4);
 
   if (!checksum.equals(expectedChecksum)) {
+    throw new Error('Invalid address');
+  }
+
+  const validVersions = Object.keys(addressTypes).map(Number);
+
+  if (!validVersions.includes(version)) {
+    throw new Error('Invalid address');
+  }
+
+  const addressType = addressTypes[version];
+
+  return {
+    ...addressType,
+    address,
+    bech32: false,
+  };
+};
+
+const validate = (address: string, network?: Network) => {
+  try {
+    const addressInfo = getAddressInfo(address);
+
+    if (network) {
+      return network === addressInfo.network;
+    }
+
+    return true;
+  } catch(error) {
     return false;
   }
-
-  return addressTypes[version] ? Object.assign({ address, bech32: false }, addressTypes[version]) : false;
 };
 
-const strictValidation = (address, network) => {
-  const validated = validate(address);
-  if (!validated) return false;
-  if (network) {
-    if (validated.network !== network) return false;
-    return true;
-  }
-  return validated;
-};
-
-export { validate };
-export default strictValidation;
+export { getAddressInfo, Network, AddressInfo, validate };
+export default validate;
