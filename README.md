@@ -96,9 +96,9 @@ This library supports the following Bitcoin networks: `mainnet`, `testnet` and `
 > **Note:** When dealing with non-bech32 addresses, all `regtest` addresses will be recognized as `testnet` addresses.
 
 
-### Typescript support
+### TypeScript support
 
-If you're using Typescript, the following types are provided with this library:
+If you're using TypeScript, the following types are provided with this library:
 
 ```ts
 enum Network {
@@ -107,19 +107,26 @@ enum Network {
   regtest = "regtest",
 }
 
-enum AddressType {
-  p2pkh = "p2pkh",
-  p2sh = "p2sh",
-  p2wpkh = "p2wpkh",
-  p2wsh = "p2wsh",
-}
-
 type AddressInfo = {
   bech32: boolean;
   network: Network;
   address: string;
   type: AddressType;
 }
+```
+
+#### TypeScript usage
+
+```ts
+import { validate, getAddressInfo, Network, AddressInfo } from 'bitcoin-address-validation';
+
+validate('36nGbqV7XCNf2xepCLAtRBaqzTcSjF4sv9', Network.mainnet);
+==> true
+
+const addressInfo: AddressInfo = getAddressInfo('2Mz8rxD6FgfbhpWf9Mde9gy6w8ZKE8cnesp');
+addressInfo.network;
+
+==> 'testnet'
 ```
 
 ## Author
