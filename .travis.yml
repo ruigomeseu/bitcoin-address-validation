@@ -1,14 +1,14 @@
 language: node_js
 node_js:
-  - 8     # to be removed 2019-12-31
   - 10    # to be removed 2021-04-01
-  - 11    # to be removed 2019-06-01
+  - 14
+  - 15
   - lts/* # safety net; don't remove
   - node  # safety net; don't remove
 before_script:
   - npm i -g rollup
 script:
-  - nyc npm test && nyc report --reporter=text-lcov > coverage.lcov && codecov
+  - npm run test
   - npm run build
 branches:
   only:
