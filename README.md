@@ -1,5 +1,3 @@
-![](https://ruigomes.me/bitcoin-address-validation.png?v=1)
-
 # bitcoin-address-validation
 
 [![Build Status](https://img.shields.io/travis/ruigomeseu/bitcoin-address-validation.svg)](https://travis-ci.org/ruigomeseu/bitcoin-address-validation)
@@ -8,12 +6,14 @@
 [![npm](https://img.shields.io/npm/dt/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
 [![Twitter Follow](https://img.shields.io/twitter/follow/8bitgomes.svg?style=social)](https://twitter.com/8bitgomes)
 
-Validate Bitcoin addresses - Bech32, P2PKH and P2SH! Available for ES6 and Node.js.
+Validate Bitcoin addresses - P2WSH, P2WPKH, P2PKH and P2SH.
 
 ```js
 validate('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4');
+==> true
 
-{
+getAddressInfo('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4');
+==> { 
   bech32: true,
   network: 'mainnet',
   address: 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
@@ -37,22 +37,51 @@ npm install bitcoin-address-validation --save
 Import using ES6:
 
 ```js
-import validate from 'bitcoin-address-validation';
+import { validate, getAddressInfo } from 'bitcoin-address-validation';
 ```
 
 Or AMD:
 
 ```js
-var validate = require('bitcoin-address-validation');
+const { validate, getAddressInfo } = require('bitcoin-address-validation');
 ```
 
 ### Validating addresses
 
-Validation is done using the `validate(address)` function.
+`validate(address)` returns `true` for valid Bitcoin addresses or `false` for invalid Bitcoin addresses.
+
 ```js
 validate('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
+==> true
 
-{
+validate('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
+==> false
+```
+
+#### Network validation
+
+`validate(address, network)` allows you to validate whether an address is valid and belongs to the input network.
+
+```js
+validate('36bJ4iqZbNevh9b9kzaMEkXb28Gpqrv2bd', 'mainnet')
+==> true
+
+validate('36bJ4iqZbNevh9b9kzaMEkXb28Gpqrv2bd', 'testnet')
+==> false
+
+validate('2N4RsPe5F2fKssy2HBf2fH2d7sHdaUjKk1c', 'testnet')
+==> true
+```
+
+### Address information
+
+`getAddressInfo(address)` parses the input address and returns information about its type and network.
+
+If the input address is invalid, an exception will be thrown.
+
+```js
+getAddressInfo('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
+==> {
   address: '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem',
   type: 'p2pkh',
   network: 'mainnet',
@@ -60,34 +89,38 @@ validate('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
 }
 ```
 
-#### Bech32 Example
-
-```js
-validate('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4');
-
-{
-  bech32: true,
-  network: 'mainnet',
-  address: 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4',
-  type: 'p2wpkh'
-}
-```
-
-#### Invalid addresses
-
-`validate(address)` will return `false` for any invalid address, regardless of the address type:
-
-```js
-validate('bc1qw508d6qejxtdg4y5r3zrrvary0c5xw7kv8f3t4')
-
-false
-```
-
 ### Networks
 
-This library supports 3 different types of networks: `mainnet`, `testnet` and `regtest`.
+This library supports the following Bitcoin networks: `mainnet`, `testnet` and `regtest`.
 
-> **Note:** When dealing with traditional (non-bech32) addresses, all `regtest` addresses will be recognized as `testnet` addresses.
+> **Note:** When dealing with non-bech32 addresses, all `regtest` addresses will be recognized as `testnet` addresses.
+
+
+### Typescript support
+
+If you're using Typescript, the following types are provided with this library:
+
+```ts
+enum Network {
+  mainnet = "mainnet",
+  testnet = "testnet",
+  regtest = "regtest",
+}
+
+enum AddressType {
+  p2pkh = "p2pkh",
+  p2sh = "p2sh",
+  p2wpkh = "p2wpkh",
+  p2wsh = "p2wsh",
+}
+
+type AddressInfo = {
+  bech32: boolean;
+  network: Network;
+  address: string;
+  type: AddressType;
+}
+```
 
 ## Author
 

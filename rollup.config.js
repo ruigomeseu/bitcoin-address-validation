@@ -1,43 +1,48 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import copy from 'rollup-plugin-copy';
+import typescript from 'rollup-plugin-typescript2'
+import commonjs from 'rollup-plugin-commonjs'
+import external from 'rollup-plugin-peer-deps-external'
+import resolve from 'rollup-plugin-node-resolve'
 import builtins from 'rollup-plugin-node-builtins';
-import pkg from './package.json';
+import { terser } from 'rollup-plugin-terser'
 
-export default [
-  {
-    input: 'src/index.js',
-    output: {
-      name: 'index',
+import pkg from './package.json'
+
+export default {
+  input: 'src/index.ts',
+  output: [
+    {
+      name: 'AddressValidation',
       file: pkg.unpkg,
-      format: 'umd'
+      format: 'umd',
+      exports: 'named',
+      intro: 'const global = window;',
     },
-    plugins: [
-      nodeResolve({
-        browser: true,
-        preferBuiltins: true
-      }),
-      commonjs(),
-      builtins(),
-      copy({
-        targets: [
-          { src: './types.d.ts', dest: './lib' }
-        ]
-      })
-    ]
-  },
-
-  {
-    input: 'src/index.js',
-    external: [
-      'base-x',
-      'buffer',
-      'bech32',
-      'sha.js'
-    ],
-    output: [
-      { file: pkg.main, format: 'cjs' },
-      { file: pkg.module, format: 'es' }
-    ]
-  }
-];
+    {
+      file: pkg.main,
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      file: pkg.module,
+      format: 'es',
+      exports: 'named',
+    }
+  ],
+  plugins: [
+    external(),
+    resolve({
+      browser: true,
+      preferBuiltins: true
+    }),
+    typescript({
+      rollupCommonJSResolveHack: true,
+      exclude: '**/tests/**',
+      clean: true
+    }),
+    commonjs({
+      include: ['node_modules/**']
+    }),
+    builtins(),
+    terser()
+  ]
+}
