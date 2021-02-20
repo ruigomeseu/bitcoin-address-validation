@@ -74,7 +74,7 @@ const validateBech32 = (address) => {
   };
 };
 
-const validateBtcAddress = (address) => {
+const validate = (address) => {
   if (!address) {
     return false;
   }
@@ -113,7 +113,7 @@ const validateBtcAddress = (address) => {
 };
 
 const strictValidation = (address, network) => {
-  const validated = validateBtcAddress(address);
+  const validated = validate(address);
   if (!validated) return false;
   if (network) {
     if (validated.network !== network) return false;
@@ -122,4 +122,5 @@ const strictValidation = (address, network) => {
   return validated;
 };
 
+export { validate };
 export default strictValidation;

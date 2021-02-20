@@ -1,6 +1,6 @@
 {
   "name": "bitcoin-address-validation",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Validate any Bitcoin address - Bech32, P2SH and P2PKH",
   "homepage": "https://github.com/ruigomeseu/bitcoin-address-validation",
   "bugs": "https://github.com/ruigomeseu/bitcoin-address-validation/issues",
@@ -8,10 +8,13 @@
   "module": "./lib/index.esm.js",
   "unpkg": "./lib/index.umd.js",
   "types": "./lib/types.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
-    "test": "rollup -c && mocha --recursive",
-    "build": "rimraf lib && rollup -c",
-    "cover": "nyc mocha",
+    "test-old": "rollup -c && mocha --recursive",
+    "build-old": "rimraf lib && rollup -c",
+    "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
   },
@@ -35,8 +38,10 @@
     "url": "https://github.com/ruigomeseu/bitcoin-address-validation"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.20",
     "chai": "^4.3.0",
     "codecov": "^3.8.1",
+    "jest": "^26.6.3",
     "mocha": "^8.3.0",
     "nyc": "^15.0.1",
     "prettier": "^2.2.1",
@@ -46,6 +51,7 @@
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.2.0",
+    "ts-jest": "^26.5.1",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^4.1.5"

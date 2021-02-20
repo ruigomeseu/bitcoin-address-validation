@@ -1,5 +1,4 @@
-const { assert } = require('chai');
-const validate = require('../lib/index.cjs.js');
+import { validate } from '../src/index';
 
 describe('Validator', () => {
   it('validates Mainnet P2PKH', () => {
