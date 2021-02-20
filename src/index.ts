@@ -1,5 +1,5 @@
 import baseX from 'base-x';
-import bech32 from 'bech32';
+import { bech32 } from 'bech32';
 import sha from 'sha.js';
 import { Buffer } from 'buffer';
 
