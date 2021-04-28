@@ -54,13 +54,13 @@ const { validate, getAddressInfo } = require('bitcoin-address-validation');
 validate('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
 ==> true
 
-validate('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
+validate('invalid')
 ==> false
 ```
 
 #### Network validation
 
-`validate(address, network)` allows you to validate whether an address is valid and belongs to the input network.
+`validate(address, network)` allows you to validate whether an address is valid and belongs to `network`.
 
 ```js
 validate('36bJ4iqZbNevh9b9kzaMEkXb28Gpqrv2bd', 'mainnet')
