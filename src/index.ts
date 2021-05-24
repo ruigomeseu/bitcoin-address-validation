@@ -90,7 +90,7 @@ const parseBech32 = (address: string): AddressInfo => {
 
 const getAddressInfo = (address: string): AddressInfo => {
   let decoded;
-  const prefix = address.substr(0, 2);
+  const prefix = address.substr(0, 2).toLowerCase();
 
   if (prefix === 'bc' || prefix === 'tb') {
     return parseBech32(address);

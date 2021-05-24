@@ -60,6 +60,19 @@ describe('Validation and parsing', () => {
     expect(getAddressInfo(addresses[1])).toEqual({ bech32: true, type: 'p2wpkh', network: 'mainnet', address: addresses[1] });
   });
 
+  it('validates uppercase Bech32 P2WPKH', () => {
+    const addresses = [
+      'BC1Q973XRRGJE6ETKKN9Q9AZZSGPXEDDATS8CKVP5S',
+      'BC1QW508D6QEJXTDG4Y5R3ZARVARY0C5XW7KV8F3T4',
+    ];
+
+    expect(validate(addresses[0])).not.toBe(false);
+    expect(getAddressInfo(addresses[0])).toEqual({ bech32: true, type: 'p2wpkh', network: 'mainnet', address: addresses[0] });
+
+    expect(validate(addresses[1])).not.toBe(false);
+    expect(getAddressInfo(addresses[1])).toEqual({bech32: true, type: 'p2wpkh', network: 'mainnet', address: addresses[1]});
+  });
+
   it('validates Testnet Bech32 P2WPKH', () => {
     const address = 'tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx';
 
