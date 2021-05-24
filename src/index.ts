@@ -8,16 +8,16 @@ const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz
 const sha256 = (payload: string | Buffer) => Buffer.from(sha('sha256').update(payload).digest());
 
 enum Network {
-  mainnet = "mainnet",
-  testnet = "testnet",
-  regtest = "regtest",
+  mainnet = 'mainnet',
+  testnet = 'testnet',
+  regtest = 'regtest',
 }
 
 enum AddressType {
-  p2pkh = "p2pkh",
-  p2sh = "p2sh",
-  p2wpkh = "p2wpkh",
-  p2wsh = "p2wsh",
+  p2pkh = 'p2pkh',
+  p2sh = 'p2sh',
+  p2wpkh = 'p2wpkh',
+  p2wsh = 'p2wsh',
 }
 
 type AddressInfo = {
@@ -25,9 +25,9 @@ type AddressInfo = {
   network: Network;
   address: string;
   type: AddressType;
-}
+};
 
-const addressTypes: { [key: number]: { type: AddressType, network: Network } } = {
+const addressTypes: { [key: number]: { type: AddressType; network: Network } } = {
   0x00: {
     type: AddressType.p2pkh,
     network: Network.mainnet,
@@ -59,9 +59,9 @@ const parseBech32 = (address: string): AddressInfo => {
   }
 
   const mapPrefixToNetwork: { [key: string]: Network } = {
-    'bc': Network.mainnet,
-    'tb': Network.testnet,
-    'bcrt': Network.regtest,
+    bc: Network.mainnet,
+    tb: Network.testnet,
+    bcrt: Network.regtest,
   };
 
   const network: Network = mapPrefixToNetwork[decoded.prefix];
@@ -143,7 +143,7 @@ const validate = (address: string, network?: Network) => {
     }
 
     return true;
-  } catch(error) {
+  } catch (error) {
     return false;
   }
 };
