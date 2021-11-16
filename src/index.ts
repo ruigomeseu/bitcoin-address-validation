@@ -1,5 +1,5 @@
 import baseX from 'base-x';
-import { bech32 } from 'bech32';
+import { bech32, bech32m } from 'bech32';
 import sha from 'sha.js';
 import { Buffer } from 'buffer';
 
@@ -18,6 +18,7 @@ enum AddressType {
   p2sh = 'p2sh',
   p2wpkh = 'p2wpkh',
   p2wsh = 'p2wsh',
+  p2tr = 'p2tr',
 }
 
 type AddressInfo = {
@@ -53,7 +54,11 @@ const parseBech32 = (address: string): AddressInfo => {
   let decoded;
 
   try {
-    decoded = bech32.decode(address);
+    if (address.startsWith('bc1p') || address.startsWith('tb1p') || address.startsWith('bcrt1p')) {
+      decoded = bech32m.decode(address);
+    } else {
+      decoded = bech32.decode(address);
+    }
   } catch (error) {
     throw new Error('Invalid address');
   }
@@ -75,10 +80,17 @@ const parseBech32 = (address: string): AddressInfo => {
   if (witnessVersion < 0 || witnessVersion > 16) {
     throw new Error('Invalid address');
   }
-
   const data = bech32.fromWords(decoded.words.slice(1));
 
-  const type = data.length === 20 ? AddressType.p2wpkh : AddressType.p2wsh;
+  let type;
+
+  if (data.length === 20) {
+    type = AddressType.p2wpkh;
+  } else if (witnessVersion === 1) {
+    type = AddressType.p2tr;
+  } else {
+    type = AddressType.p2wsh;
+  }
 
   return {
     bech32: true,

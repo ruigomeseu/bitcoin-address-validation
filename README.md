@@ -6,7 +6,7 @@
 [![npm](https://img.shields.io/npm/dt/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
 [![Twitter Follow](https://img.shields.io/twitter/follow/8bitgomes.svg?style=social)](https://twitter.com/8bitgomes)
 
-Validate Bitcoin addresses - P2WSH, P2WPKH, P2PKH and P2SH.
+Validate Bitcoin addresses - P2WSH, P2WPKH, P2PKH, P2SH and P2TR.
 
 ```js
 validate('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4');

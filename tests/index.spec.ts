@@ -101,6 +101,27 @@ describe('Validation and parsing', () => {
     expect(getAddressInfo(address)).toEqual({ bech32: true, type: 'p2wpkh', network: 'regtest', address });
   });
 
+  it('validates Mainnet Bech32 P2TR', () => {
+    const address = 'bc1ptxs597p3fnpd8gwut5p467ulsydae3rp9z75hd99w8k3ljr9g9rqx6ynaw';
+
+    expect(validate(address)).not.toBe(false);
+    expect(getAddressInfo(address)).toEqual({ bech32: true, type: 'p2tr', network: 'mainnet', address });
+  });
+
+  it('validates Testnet Bech32 P2TR', () => {
+    const address = 'tb1p84x2ryuyfevgnlpnxt9f39gm7r68gwtvllxqe5w2n5ru00s9aquslzggwq';
+
+    expect(validate(address)).not.toBe(false);
+    expect(getAddressInfo(address)).toEqual({ bech32: true, type: 'p2tr', network: 'testnet', address });
+  });
+
+  it('validates Regtest Bech32 P2TR', () => {
+    const address = 'bcrt1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqc8gma6';
+
+    expect(validate(address)).not.toBe(false);
+    expect(getAddressInfo(address)).toEqual({ bech32: true, type: 'p2tr', network: 'regtest', address });
+  });
+
   it('validates Mainnet Bech32 P2WSH', () => {
     const address = 'bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3';
 
