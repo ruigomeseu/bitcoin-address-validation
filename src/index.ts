@@ -1,11 +1,8 @@
-import baseX from 'base-x';
+import * as base58 from '@digitalcredentials/base58-universal';
 import { bech32, bech32m } from 'bech32';
-import sha from 'sha.js';
-import { Buffer } from 'buffer';
+import { createHash } from 'sha256-uint8array';
 
-const base58 = baseX('123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz');
-
-const sha256 = (payload: string | Buffer) => Buffer.from(sha('sha256').update(payload).digest());
+const sha256 = (payload: Uint8Array) => createHash().update(payload).digest();
 
 enum Network {
   mainnet = 'mainnet',
@@ -101,7 +98,7 @@ const parseBech32 = (address: string): AddressInfo => {
 };
 
 const getAddressInfo = (address: string): AddressInfo => {
-  let decoded;
+  let decoded: Uint8Array;
   const prefix = address.substr(0, 2).toLowerCase();
 
   if (prefix === 'bc' || prefix === 'tb') {
@@ -120,14 +117,14 @@ const getAddressInfo = (address: string): AddressInfo => {
     throw new Error('Invalid address');
   }
 
-  const version = decoded.readUInt8(0);
+  const version = decoded[0];
 
   const checksum = decoded.slice(length - 4, length);
   const body = decoded.slice(0, length - 4);
 
   const expectedChecksum = sha256(sha256(body)).slice(0, 4);
 
-  if (!checksum.equals(expectedChecksum)) {
+  if (checksum.some((value: number, index: number) => value !== expectedChecksum[index])) {
     throw new Error('Invalid address');
   }
 
