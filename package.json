@@ -61,7 +61,7 @@
     "typescript": "^4.1.5"
   },
   "dependencies": {
-    "@digitalcredentials/base58-universal": "^1.0.1",
+    "base58-js": "^1.0.0",
     "bech32": "^2.0.0",
     "sha256-uint8array": "^0.10.3"
   }

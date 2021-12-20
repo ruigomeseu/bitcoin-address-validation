@@ -1,4 +1,4 @@
-import * as base58 from '@digitalcredentials/base58-universal';
+import { base58_to_binary } from 'base58-js'
 import { bech32, bech32m } from 'bech32';
 import { createHash } from 'sha256-uint8array';
 
@@ -106,7 +106,7 @@ const getAddressInfo = (address: string): AddressInfo => {
   }
 
   try {
-    decoded = base58.decode(address);
+    decoded = base58_to_binary(address);
   } catch (error) {
     throw new Error('Invalid address');
   }
