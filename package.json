@@ -1,6 +1,6 @@
 {
   "name": "bitcoin-address-validation",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Validate any Bitcoin address - P2WSH, P2WPKH, P2SH, P2PKH - Mainnet & Testnet",
   "homepage": "https://github.com/ruigomeseu/bitcoin-address-validation",
   "bugs": "https://github.com/ruigomeseu/bitcoin-address-validation/issues",
