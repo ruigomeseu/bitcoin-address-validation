@@ -107,6 +107,14 @@ enum Network {
   regtest = "regtest",
 }
 
+enum AddressType {
+  p2pkh = 'p2pkh',
+  p2sh = 'p2sh',
+  p2wpkh = 'p2wpkh',
+  p2wsh = 'p2wsh',
+  p2tr = 'p2tr',
+}
+
 type AddressInfo = {
   bech32: boolean;
   network: Network;

@@ -157,5 +157,5 @@ const validate = (address: string, network?: Network) => {
   }
 };
 
-export { getAddressInfo, Network, AddressInfo, validate };
+export { getAddressInfo, Network, AddressType, AddressInfo, validate };
 export default validate;
