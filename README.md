@@ -89,9 +89,34 @@ getAddressInfo('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
 
 ### Networks
 
-This library supports the following Bitcoin networks: `mainnet`, `testnet` and `regtest`.
+This library supports the following Bitcoin networks: `mainnet`, `testnet`, `regtest` and `signet`.
 
 > **Note:** When dealing with non-bech32 addresses, all `regtest` addresses will be recognized as `testnet` addresses.
+
+
+#### Casting testnet addresses to regtest or signet
+
+`signet` addresses will always be recognized as `testnet` addresses.
+`regtest` addresses, if not bech32, will be recognized as `testnet` addresses.
+
+You can use the `options` parameter to cast `testnet` addresses to `regtest` or `signet`.
+
+```js
+getAddressInfo('tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr', {
+  castTestnetTo: 'signet'
+})
+==> {
+  address: 'tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr',
+  type: 'p2wpkh',
+  network: 'signet',
+  bech32: true
+}
+
+validate('tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr', 'signet', {
+  castTestnetTo: 'signet'
+})
+==> true
+```
 
 
 ### TypeScript support
@@ -103,6 +128,7 @@ enum Network {
   mainnet = "mainnet",
   testnet = "testnet",
   regtest = "regtest",
+  signet = "signet",
 }
 
 enum AddressType {
