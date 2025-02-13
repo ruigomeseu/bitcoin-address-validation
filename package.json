@@ -16,7 +16,8 @@
     "format": "prettier --write src/**/*.ts",
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "lint": "tsc --noEmit",
-    "ci": "pnpm run build && pnpm run check-format && pnpm run check-exports && pnpm run lint && pnpm run test"
+    "ci": "pnpm run build && pnpm run check-format && pnpm run check-exports && pnpm run lint && pnpm run test",
+    "local-release": "changeset version && changeset publish"
   },
   "keywords": [
     "address",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
+    "@changesets/cli": "^2.27.12",
     "@types/sha.js": "^2.4.0",
     "prettier": "^3.5.1",
     "typescript": "^5.7.3",
