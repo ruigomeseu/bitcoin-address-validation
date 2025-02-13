@@ -91,17 +91,28 @@ getAddressInfo('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
 
 This library supports the following Bitcoin networks: `mainnet`, `testnet`, `regtest` and `signet`.
 
-> **Note:** When dealing with non-bech32 addresses, all `regtest` addresses will be recognized as `testnet` addresses.
+> `signet` addresses will always be recognized as `testnet` addresses.
+
+> Non-bech32 `regtest` addresses will be recognized as `testnet` addresses.
 
 
 #### Casting testnet addresses to regtest or signet
 
-`signet` addresses will always be recognized as `testnet` addresses.
-`regtest` addresses, if not bech32, will be recognized as `testnet` addresses.
 
 You can use the `options` parameter to cast `testnet` addresses to `regtest` or `signet`.
 
 ```js
+// Default - No casting
+getAddressInfo('tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr');
+
+==> {
+  address: 'tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr',
+  type: 'p2wpkh',
+  network: 'testnet',
+  bech32: true
+}
+
+// Cast testnet to signet
 getAddressInfo('tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr', {
   castTestnetTo: 'signet'
 })
@@ -112,6 +123,7 @@ getAddressInfo('tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr', {
   bech32: true
 }
 
+// Validating and casting
 validate('tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr', 'signet', {
   castTestnetTo: 'signet'
 })
