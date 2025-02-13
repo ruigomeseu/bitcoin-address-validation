@@ -104,7 +104,6 @@ You can use the `options` parameter to cast `testnet` addresses to `regtest` or 
 ```js
 // Default - No casting
 getAddressInfo('tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr');
-
 ==> {
   address: 'tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr',
   type: 'p2wpkh',
