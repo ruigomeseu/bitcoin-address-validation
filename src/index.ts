@@ -1,4 +1,4 @@
-import { base58_to_binary } from 'base58-js'
+import { base58_to_binary } from 'base58-js';
 import { bech32, bech32m } from 'bech32';
 import { createHash } from 'sha256-uint8array';
 
@@ -8,6 +8,7 @@ enum Network {
   mainnet = 'mainnet',
   testnet = 'testnet',
   regtest = 'regtest',
+  signet = 'signet',
 }
 
 enum AddressType {
@@ -47,7 +48,30 @@ const addressTypes: { [key: number]: { type: AddressType; network: Network } } =
   },
 };
 
-const parseBech32 = (address: string): AddressInfo => {
+type Options = {
+  castTestnetTo?: Network.regtest | Network.signet;
+};
+
+function castTestnetTo(fromNetwork: Network, toNetwork?: Network.regtest | Network.signet): Network {
+  if (!toNetwork) {
+    return fromNetwork;
+  }
+
+  if (fromNetwork === Network.mainnet) {
+    throw new Error('Cannot cast mainnet to non-mainnet');
+  }
+
+  return toNetwork;
+}
+
+const normalizeAddressInfo = (addressInfo: AddressInfo, options?: Options): AddressInfo => {
+  return {
+    ...addressInfo,
+    network: castTestnetTo(addressInfo.network, options?.castTestnetTo),
+  };
+};
+
+const parseBech32 = (address: string, options?: Options): AddressInfo => {
   let decoded;
 
   try {
@@ -66,7 +90,7 @@ const parseBech32 = (address: string): AddressInfo => {
     bcrt: Network.regtest,
   };
 
-  const network: Network = mapPrefixToNetwork[decoded.prefix];
+  const network: Network | undefined = mapPrefixToNetwork[decoded.prefix];
 
   if (network === undefined) {
     throw new Error('Invalid address');
@@ -74,7 +98,7 @@ const parseBech32 = (address: string): AddressInfo => {
 
   const witnessVersion = decoded.words[0];
 
-  if (witnessVersion < 0 || witnessVersion > 16) {
+  if (witnessVersion === undefined || witnessVersion < 0 || witnessVersion > 16) {
     throw new Error('Invalid address');
   }
   const data = bech32.fromWords(decoded.words.slice(1));
@@ -89,20 +113,23 @@ const parseBech32 = (address: string): AddressInfo => {
     type = AddressType.p2wsh;
   }
 
-  return {
-    bech32: true,
-    network,
-    address,
-    type,
-  };
+  return normalizeAddressInfo(
+    {
+      bech32: true,
+      network,
+      address,
+      type,
+    },
+    options,
+  );
 };
 
-const getAddressInfo = (address: string): AddressInfo => {
+const getAddressInfo = (address: string, options?: Options): AddressInfo => {
   let decoded: Uint8Array;
-  const prefix = address.substr(0, 2).toLowerCase();
+  const prefix = address.slice(0, 2).toLowerCase();
 
   if (prefix === 'bc' || prefix === 'tb') {
-    return parseBech32(address);
+    return parseBech32(address, options);
   }
 
   try {
@@ -130,22 +157,29 @@ const getAddressInfo = (address: string): AddressInfo => {
 
   const validVersions = Object.keys(addressTypes).map(Number);
 
-  if (!validVersions.includes(version)) {
+  if (version === undefined || !validVersions.includes(version)) {
     throw new Error('Invalid address');
   }
 
   const addressType = addressTypes[version];
 
-  return {
-    ...addressType,
-    address,
-    bech32: false,
-  };
+  if (!addressType) {
+    throw new Error('Invalid address');
+  }
+
+  return normalizeAddressInfo(
+    {
+      ...addressType,
+      address,
+      bech32: false,
+    },
+    options,
+  );
 };
 
-const validate = (address: string, network?: Network) => {
+const validate = (address: string, network?: Network, options?: Options) => {
   try {
-    const addressInfo = getAddressInfo(address);
+    const addressInfo = getAddressInfo(address, options);
 
     if (network) {
       return network === addressInfo.network;
@@ -157,5 +191,6 @@ const validate = (address: string, network?: Network) => {
   }
 };
 
-export { getAddressInfo, Network, AddressType, AddressInfo, validate };
+export { getAddressInfo, Network, AddressType, validate };
+export type { AddressInfo };
 export default validate;

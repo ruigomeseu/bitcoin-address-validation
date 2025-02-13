@@ -1,4 +1,5 @@
 import validate, { getAddressInfo, Network } from '../src/index';
+import { expect, describe, it } from "vitest";
 
 describe('Validation and parsing', () => {
   it('validates Mainnet P2PKH', () => {
@@ -143,6 +144,13 @@ describe('Validation and parsing', () => {
     expect(getAddressInfo(address)).toEqual({ bech32: true, type: 'p2wsh', network: 'regtest', address });
   });
 
+  it('validates Signet Bech32 P2WKH', () => {
+    const address = 'bcrt1qc7evl8kdgp69h7qmm8cndaq07xkhj6ulyck0x5';
+
+    expect(validate(address)).not.toBe(false);
+    expect(getAddressInfo(address)).toEqual({ bech32: true, type: 'p2wpkh', network: 'regtest', address });
+  });
+
   it('fails on invalid Bech32', () => {
     const address = 'bc1qw508d6qejxtdg4y5r3zrrvary0c5xw7kv8f3t4';
 
@@ -151,6 +159,22 @@ describe('Validation and parsing', () => {
 
   it('errors on non-base58 encoded', () => {
     expect(() => getAddressInfo('???')).toThrow();
+  });
+});
+
+describe('Casting', () => {
+  it('casts testnet to regtest', () => {
+    const address = 'tb1qg3hss5p9g9jp0es5u5aaz3lszf6cvdggtmjarr';
+
+    expect(getAddressInfo(address, { castTestnetTo: Network.signet })).toEqual({ bech32: true, type: 'p2wpkh', network: 'signet', address });
+    expect(validate(address, Network.signet, { castTestnetTo: Network.signet })).toEqual(true);
+  });
+
+  it('fails to validate a mainnet address casted to signet', () => {
+    const address = '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem';
+
+    expect(() => getAddressInfo(address, { castTestnetTo: Network.signet })).toThrow();
+    expect(validate(address, Network.signet, { castTestnetTo: Network.signet })).toEqual(false);
   });
 });
 
