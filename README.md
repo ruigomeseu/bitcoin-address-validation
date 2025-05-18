@@ -32,16 +32,9 @@ npm install bitcoin-address-validation --save
 ## Usage
 
 ### Importing
-Import using ES6:
 
 ```js
 import { validate, getAddressInfo } from 'bitcoin-address-validation';
-```
-
-Or AMD:
-
-```js
-const { validate, getAddressInfo } = require('bitcoin-address-validation');
 ```
 
 ### Validating addresses
