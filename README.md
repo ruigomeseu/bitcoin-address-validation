@@ -1,7 +1,7 @@
 # bitcoin-address-validation
 
 [![npm version](https://badge.fury.io/js/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
-[![npm](https://img.shields.io/npm/dt/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
+[![npm](https://img.shields.io/npm/dw/bitcoin-address-validation.svg)](https://www.npmjs.com/package/bitcoin-address-validation)
 [![Twitter Follow](https://img.shields.io/twitter/follow/8bitgomes.svg?style=social)](https://twitter.com/8bitgomes)
 
 Validate Bitcoin addresses - P2WSH, P2WPKH, P2PKH, P2SH and P2TR.
