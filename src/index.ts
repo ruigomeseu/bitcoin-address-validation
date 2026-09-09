@@ -20,6 +20,7 @@ enum AddressType {
   p2wpkh = 'p2wpkh',
   p2wsh = 'p2wsh',
   p2tr = 'p2tr',
+  unknown = 'unknown',
 }
 
 type AddressInfo = {
@@ -56,15 +57,19 @@ type Options = {
 };
 
 function castTestnetTo(fromNetwork: Network, toNetwork?: Network.regtest | Network.signet): Network {
-  if (!toNetwork) {
+  if (toNetwork === undefined) {
     return fromNetwork;
+  }
+
+  if (toNetwork !== Network.regtest && toNetwork !== Network.signet) {
+    throw new Error('Invalid casting destination');
   }
 
   if (fromNetwork === Network.mainnet) {
     throw new Error('Cannot cast mainnet to non-mainnet');
   }
 
-  return toNetwork;
+  return fromNetwork === Network.testnet ? toNetwork : fromNetwork;
 }
 
 const normalizeAddressInfo = (addressInfo: AddressInfo, options?: Options): AddressInfo => {
@@ -75,15 +80,15 @@ const normalizeAddressInfo = (addressInfo: AddressInfo, options?: Options): Addr
 };
 
 const parseBech32 = (address: string, options?: Options): AddressInfo => {
-  let decoded;
+  // Reject non-ASCII input before the decoder normalizes case (e.g. Kelvin sign to k).
+  if (/[^\x21-\x7e]/.test(address)) {
+    throw new Error('Invalid address');
+  }
 
-  try {
-    if (address.startsWith('bc1p') || address.startsWith('tb1p') || address.startsWith('bcrt1p')) {
-      decoded = bech32m.decode(address);
-    } else {
-      decoded = bech32.decode(address);
-    }
-  } catch (error) {
+  const decodedBech32 = bech32.decodeUnsafe(address);
+  const decoded = decodedBech32 ?? bech32m.decodeUnsafe(address);
+
+  if (!decoded) {
     throw new Error('Invalid address');
   }
 
@@ -104,16 +109,31 @@ const parseBech32 = (address: string, options?: Options): AddressInfo => {
   if (witnessVersion === undefined || witnessVersion < 0 || witnessVersion > 16) {
     throw new Error('Invalid address');
   }
+
+  const usesBech32 = decodedBech32 !== undefined;
+
+  if ((witnessVersion === 0 && !usesBech32) || (witnessVersion > 0 && usesBech32)) {
+    throw new Error('Invalid address');
+  }
+
   const data = bech32.fromWords(decoded.words.slice(1));
 
-  let type;
+  if (data.length < 2 || data.length > 40) {
+    throw new Error('Invalid address');
+  }
 
-  if (data.length === 20) {
+  if (witnessVersion === 0 && data.length !== 20 && data.length !== 32) {
+    throw new Error('Invalid address');
+  }
+
+  let type = AddressType.unknown;
+
+  if (witnessVersion === 0 && data.length === 20) {
     type = AddressType.p2wpkh;
-  } else if (witnessVersion === 1) {
-    type = AddressType.p2tr;
-  } else {
+  } else if (witnessVersion === 0 && data.length === 32) {
     type = AddressType.p2wsh;
+  } else if (witnessVersion === 1 && data.length === 32) {
+    type = AddressType.p2tr;
   }
 
   return normalizeAddressInfo(
@@ -139,6 +159,10 @@ const getAddressInfo = (address: string, options?: Options): AddressInfo => {
     return parseBech32(address, options);
   }
 
+  if (/[^1-9A-HJ-NP-Za-km-z]/.test(address)) {
+    throw new Error('Invalid address');
+  }
+
   try {
     decoded = base58_to_binary(address);
   } catch (error) {
@@ -162,9 +186,7 @@ const getAddressInfo = (address: string, options?: Options): AddressInfo => {
     throw new Error('Invalid address');
   }
 
-  const validVersions = Object.keys(addressTypes).map(Number);
-
-  if (version === undefined || !validVersions.includes(version)) {
+  if (version === undefined) {
     throw new Error('Invalid address');
   }
 
