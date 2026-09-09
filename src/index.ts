@@ -2,6 +2,9 @@ import { base58_to_binary } from 'base58-js';
 import { bech32, bech32m } from 'bech32';
 import { createHash } from 'sha256-uint8array';
 
+// Defensive parsing limit to bound Base58 decoding work; individual formats enforce their own limits.
+const MAX_ADDRESS_INPUT_LENGTH = 500;
+
 const sha256 = (payload: Uint8Array) => createHash().update(payload).digest();
 
 enum Network {
@@ -125,6 +128,10 @@ const parseBech32 = (address: string, options?: Options): AddressInfo => {
 };
 
 const getAddressInfo = (address: string, options?: Options): AddressInfo => {
+  if (address.length > MAX_ADDRESS_INPUT_LENGTH) {
+    throw new Error('Invalid address');
+  }
+
   let decoded: Uint8Array;
   const prefix = address.slice(0, 2).toLowerCase();
 
