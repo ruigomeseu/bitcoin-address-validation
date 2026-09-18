@@ -20,6 +20,8 @@ getAddressInfo('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4');
 ```
 
 ## Installation
+Node.js 18.8 or newer is required when using this library in Node.js.
+
 Add `bitcoin-address-validation` to your Javascript project dependencies using Yarn:
 ```bash
 yarn add bitcoin-address-validation
@@ -70,6 +72,8 @@ validate('2N4RsPe5F2fKssy2HBf2fH2d7sHdaUjKk1c', 'testnet')
 
 If the input address is invalid, an exception will be thrown.
 
+Valid witness addresses whose version and program length do not identify P2WPKH, P2WSH, or P2TR return `type: 'unknown'`. These addresses pass `validate`; applications that require a recognized payment type should also check `type`.
+
 ```js
 getAddressInfo('17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem')
 ==> {
@@ -93,6 +97,8 @@ This library supports the following Bitcoin networks: `mainnet`, `testnet`, `reg
 
 
 You can use the `options` parameter to cast `testnet` addresses to `regtest` or `signet`.
+
+Other casting destinations are rejected, including in JavaScript: `getAddressInfo` throws and `validate` returns `false`.
 
 ```js
 // Default - No casting
@@ -141,6 +147,7 @@ enum AddressType {
   p2wpkh = 'p2wpkh',
   p2wsh = 'p2wsh',
   p2tr = 'p2tr',
+  unknown = 'unknown',
 }
 
 type AddressInfo = {
@@ -163,6 +170,15 @@ const addressInfo: AddressInfo = getAddressInfo('2Mz8rxD6FgfbhpWf9Mde9gy6w8ZKE8c
 addressInfo.network;
 
 ==> 'testnet'
+```
+
+## Development
+
+Use Node.js 22 (22.12 or newer) or Node.js 24, with pnpm 10 or newer.
+
+```bash
+pnpm install
+pnpm run ci
 ```
 
 ## Author

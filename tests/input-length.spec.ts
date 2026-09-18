@@ -11,12 +11,12 @@ vi.mock('base58-js', () => ({
 }));
 vi.mock('bech32', () => ({
   bech32: {
-    decode: vi.fn(() => {
+    decodeUnsafe: vi.fn(() => {
       throw new Error('Decoder reached');
     }),
   },
   bech32m: {
-    decode: vi.fn(() => {
+    decodeUnsafe: vi.fn(() => {
       throw new Error('Decoder reached');
     }),
   },
@@ -31,8 +31,8 @@ describe('Address input length limit', () => {
     expect(validate(address)).toBe(false);
     expect(() => getAddressInfo(address)).toThrow('Invalid address');
     expect(vi.mocked(base58_to_binary).mock.calls.length).toBe(0);
-    expect(vi.mocked(bech32.decode).mock.calls.length).toBe(0);
-    expect(vi.mocked(bech32m.decode).mock.calls.length).toBe(0);
+    expect(vi.mocked(bech32.decodeUnsafe).mock.calls.length).toBe(0);
+    expect(vi.mocked(bech32m.decodeUnsafe).mock.calls.length).toBe(0);
   });
 
   it.each(['bc1q', 'bc1p', 'tb1q', 'bcrt1p'])('rejects oversized %s inputs before decoding', (prefix) => {
@@ -41,8 +41,8 @@ describe('Address input length limit', () => {
     expect(validate(address)).toBe(false);
     expect(() => getAddressInfo(address)).toThrow('Invalid address');
     expect(vi.mocked(base58_to_binary).mock.calls.length).toBe(0);
-    expect(vi.mocked(bech32.decode).mock.calls.length).toBe(0);
-    expect(vi.mocked(bech32m.decode).mock.calls.length).toBe(0);
+    expect(vi.mocked(bech32.decodeUnsafe).mock.calls.length).toBe(0);
+    expect(vi.mocked(bech32m.decodeUnsafe).mock.calls.length).toBe(0);
   });
 
   it('leaves inputs of exactly 500 characters to format validation', () => {
